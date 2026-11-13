@@ -1,0 +1,201 @@
+[solution]
+id = "com.facthory.cancer_genome_atlas_engine"
+title = "Cancer Genome Atlas Engine"
+version = "0.1.0"
+contract = "0-draft"
+licence = "Apache-2.0"
+health_related = true
+
+# Sample tables: a small real subset of TCGA open-access data published by the GDC.
+# See data/README.md for provenance and attribution.
+[[dataset]]
+name = "expression_files_info_raw"
+path = "data/sample/expression_files_info_raw.parquet"
+synthetic = false
+licence = "TCGA open access (GDC)"
+
+[[dataset]]
+name = "cases_raw"
+path = "data/sample/cases_raw.parquet"
+synthetic = false
+licence = "TCGA open access (GDC)"
+
+[[dataset]]
+name = "expression_profiles_raw"
+path = "data/sample/expression_profiles_raw.parquet"
+synthetic = false
+licence = "TCGA open access (GDC)"
+
+[[dataset]]
+name = "expression_files_info"
+path = "data/sample/expression_files_info.parquet"
+synthetic = false
+licence = "TCGA open access (GDC)"
+
+[[dataset]]
+name = "cases"
+path = "data/sample/cases.parquet"
+synthetic = false
+licence = "TCGA open access (GDC)"
+
+[[dataset]]
+name = "expression_profiles"
+path = "data/sample/expression_profiles.parquet"
+synthetic = false
+licence = "TCGA open access (GDC)"
+
+[[dataset]]
+name = "cases_demographics"
+path = "data/sample/cases_demographics.parquet"
+synthetic = false
+licence = "TCGA open access (GDC)"
+
+[[dataset]]
+name = "cases_diagnoses"
+path = "data/sample/cases_diagnoses.parquet"
+synthetic = false
+licence = "TCGA open access (GDC)"
+
+[[dataset]]
+name = "cases_exposures"
+path = "data/sample/cases_exposures.parquet"
+synthetic = false
+licence = "TCGA open access (GDC)"
+
+[[dataset]]
+name = "gene_variance"
+path = "data/sample/gene_variance.parquet"
+synthetic = false
+licence = "TCGA open access (GDC)"
+
+[[dataset]]
+name = "expression_coordinates"
+path = "data/sample/expression_coordinates.parquet"
+synthetic = false
+licence = "TCGA open access (GDC)"
+
+[[dataset]]
+name = "explained_variance"
+path = "data/sample/explained_variance.parquet"
+synthetic = false
+licence = "TCGA open access (GDC)"
+
+[[dataset]]
+name = "expression_clusters"
+path = "data/sample/expression_clusters.parquet"
+synthetic = false
+licence = "TCGA open access (GDC)"
+
+[[dataset]]
+name = "cluster_summary"
+path = "data/sample/cluster_summary.parquet"
+synthetic = false
+licence = "TCGA open access (GDC)"
+
+[[dataset]]
+name = "tissue_summary"
+path = "data/sample/tissue_summary.parquet"
+synthetic = false
+licence = "TCGA open access (GDC)"
+
+[[dataset]]
+name = "demographic_summary"
+path = "data/sample/demographic_summary.parquet"
+synthetic = false
+licence = "TCGA open access (GDC)"
+
+[[dataset]]
+name = "exposure_summary"
+path = "data/sample/exposure_summary.parquet"
+synthetic = false
+licence = "TCGA open access (GDC)"
+
+# Silver layer: raw tables into validated tables.
+[[job]]
+name = "clean_expression_files"
+entry = "cancer_genome_atlas_engine.jobs.clean_expression_files:run"
+mode = "call"
+inputs = ["expression_files_info_raw"]
+outputs = ["expression_files_info"]
+
+[[job]]
+name = "clean_cases"
+entry = "cancer_genome_atlas_engine.jobs.clean_cases:run"
+mode = "call"
+inputs = ["cases_raw"]
+outputs = ["cases"]
+
+[[job]]
+name = "clean_expression_profiles"
+entry = "cancer_genome_atlas_engine.jobs.clean_expression_profiles:run"
+mode = "call"
+inputs = ["expression_profiles_raw"]
+outputs = ["expression_profiles"]
+
+[[job]]
+name = "cases_demographics"
+entry = "cancer_genome_atlas_engine.jobs.cases_demographics:run"
+mode = "call"
+inputs = ["cases", "expression_files_info"]
+outputs = ["cases_demographics"]
+
+[[job]]
+name = "cases_diagnoses"
+entry = "cancer_genome_atlas_engine.jobs.cases_diagnoses:run"
+mode = "call"
+inputs = ["cases", "expression_files_info"]
+outputs = ["cases_diagnoses"]
+
+[[job]]
+name = "cases_exposures"
+entry = "cancer_genome_atlas_engine.jobs.cases_exposures:run"
+mode = "call"
+inputs = ["cases", "expression_files_info"]
+outputs = ["cases_exposures"]
+
+# Gold layer: variable genes, dimensionality reduction and clustering.
+[[job]]
+name = "select_variable_genes"
+entry = "cancer_genome_atlas_engine.jobs.select_variable_genes:run"
+mode = "call"
+inputs = ["expression_profiles"]
+outputs = ["gene_variance"]
+
+[[job]]
+name = "expression_dimensions"
+entry = "cancer_genome_atlas_engine.jobs.expression_dimensions:run"
+mode = "job"
+inputs = ["expression_profiles", "gene_variance"]
+outputs = ["expression_coordinates", "explained_variance"]
+
+[[job]]
+name = "cluster_expression"
+entry = "cancer_genome_atlas_engine.jobs.cluster_expression:run"
+mode = "job"
+inputs = ["expression_coordinates", "cases_diagnoses"]
+outputs = ["expression_clusters", "cluster_summary"]
+
+# Cohort summaries.
+[[job]]
+name = "tissue_summary"
+entry = "cancer_genome_atlas_engine.jobs.tissue_summary:run"
+mode = "call"
+inputs = ["cases_diagnoses"]
+outputs = ["tissue_summary"]
+
+[[job]]
+name = "demographic_summary"
+entry = "cancer_genome_atlas_engine.jobs.demographic_summary:run"
+mode = "call"
+inputs = ["cases_demographics"]
+outputs = ["demographic_summary"]
+
+[[job]]
+name = "exposure_summary"
+entry = "cancer_genome_atlas_engine.jobs.exposure_summary:run"
+mode = "call"
+inputs = ["cases_exposures"]
+outputs = ["exposure_summary"]
+
+[skill]
+instructions = "skills/cancer_genome_atlas_engine.md"

@@ -30,3 +30,40 @@ This is software for research and analytics. It is not a medical device and must
 ## Licence
 
 Apache-2.0. See [LICENSE](LICENSE). "Facthory" and the Facthory logo are trademarks of their owner and are not covered by that licence.
+
+## Jobs
+
+| Job | What it does | Inputs | Outputs |
+| --- | --- | --- | --- |
+| `clean_expression_files` | Silver: file metadata with both identifiers present | `expression_files_info_raw` | `expression_files_info` |
+| `clean_cases` | Silver: clinical cases with a case identifier | `cases_raw` | `cases` |
+| `clean_expression_profiles` | Silver: expression profiles with validated FPKM values | `expression_profiles_raw` | `expression_profiles` |
+| `cases_demographics` | Silver: demographics per sample, with vital status | `cases`, `expression_files_info` | `cases_demographics` |
+| `cases_diagnoses` | Silver: diagnoses per sample, with treatment flag | `cases`, `expression_files_info` | `cases_diagnoses` |
+| `cases_exposures` | Silver: exposures per sample, with smoking status | `cases`, `expression_files_info` | `cases_exposures` |
+| `select_variable_genes` | The genes whose expression varies most across samples | `expression_profiles` | `gene_variance` |
+| `expression_dimensions` | PCA and t-SNE coordinates per sample, with explained variance | `expression_profiles`, `gene_variance` | `expression_coordinates`, `explained_variance` |
+| `cluster_expression` | K-means clusters over the reduced samples, summarised by tissue | `expression_coordinates`, `cases_diagnoses` | `expression_clusters`, `cluster_summary` |
+| `tissue_summary` | Samples per tissue of origin | `cases_diagnoses` | `tissue_summary` |
+| `demographic_summary` | Samples per gender and vital status | `cases_demographics` | `demographic_summary` |
+| `exposure_summary` | Samples per smoking status | `cases_exposures` | `exposure_summary` |
+
+Every job is a plain function from named PyArrow tables to named tables: the joins, filters and aggregations run as DuckDB SQL (`sql/`), and the dimensionality reduction and clustering use scikit-learn. Named measures live in `metrics/`.
+
+## Data
+
+The sample tables in `data/sample/` are a small real subset of TCGA open-access data published by the Genomic Data Commons: nine RNA-Seq samples from TCGA-BRCA, TCGA-LUAD and TCGA-KIRC over the 300 most variable genes. See [data/README.md](data/README.md) for one row per file with origin and licence. TCGA open-access data are free to use; acknowledge TCGA and the GDC when you publish results.
+
+## Run it locally
+
+```
+uv sync
+uv run python -m cancer_genome_atlas_engine expression_dimensions --n-pca-components 10
+uv run python -m cancer_genome_atlas_engine cluster_expression --n-clusters 4
+uv run pytest
+```
+
+`uv run python -m cancer_genome_atlas_engine --help` lists every job; each job has its own `--help`. The pipeline runs layer by layer: the silver jobs clean the raw tables, `select_variable_genes` picks the feature set, `expression_dimensions` reduces it, and `cluster_expression` groups the samples; the summaries read the silver tables directly.
+
+Clusters are an unsupervised grouping of expression profiles: exploratory, sensitive to the number of clusters and the gene set, and not a clinical classification.
+

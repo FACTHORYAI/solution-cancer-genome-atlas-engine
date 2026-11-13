@@ -1,0 +1,25 @@
+"""Silver: patient demographics per sample file."""
+
+from __future__ import annotations
+
+from dataclasses import dataclass
+
+import pyarrow as pa
+
+from cancer_genome_atlas_engine import io
+from cancer_genome_atlas_engine.jobs._duck import align, run_query
+from cancer_genome_atlas_engine.schemas import CASES_DEMOGRAPHICS
+
+INPUTS = ("cases", "expression_files_info")
+OUTPUTS = ("cases_demographics",)
+
+
+@dataclass(frozen=True)
+class Params:
+    """Parameters for the demographics table."""
+
+
+def run(inputs: dict[str, pa.Table], params: Params) -> dict[str, pa.Table]:
+    """Return demographics with a vital-status flag, one row per sample file."""
+    table = run_query(io.read_sql("cases_demographics"), inputs)
+    return {"cases_demographics": align(table, CASES_DEMOGRAPHICS)}
