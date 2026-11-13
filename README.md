@@ -23,13 +23,19 @@ Analyse the open data of The Cancer Genome Atlas (TCGA) across cancer types, in 
 - Its results are tables and pages in your workspace, so you can query them, chart them and ask the agent about them, inside your permissions.
 - Sample data in this repository is synthetic or openly licensed. No real patient data.
 
+## What the result could look like
+
+![Mock-up of a Facthory report page titled "Patient similarity map", marked "Sample data": a scatter plot of 600 patients in two dimensions, labelled by tissue or organ of origin (liver, kidney, skin, prostate gland, endometrium, ovary, cerebrum, thyroid gland, breast, upper lobe of lung), with buttons to group by tissue or organ of origin, primary diagnosis or tumour grade, and a list of the groups with their patient counts.](docs/images/patient-similarity-map-mockup.png)
+
+A design illustration of a similarity map: each dot is a patient, grouped by tissue or organ of origin, primary diagnosis or tumour grade. It is a mock-up. Its figures are illustrative: it shows 600 patients, not this repository's 9 samples, and it is not a screenshot of a released feature. Note that the mock-up's subtitle describes patients whose reports read alike; this repository draws its map from gene expression profiles (principal components and t-SNE), not from report text.
+
 ## Not for clinical use
 
 This is software for research and analytics. It is not a medical device and must not be used to diagnose or treat a patient. Results can be wrong; a qualified person reviews them.
 
 ## Licence
 
-Apache-2.0. See [LICENSE](LICENSE). "Facthory" and the Facthory logo are trademarks of their owner and are not covered by that licence.
+Apache-2.0. See [LICENSE](LICENSE). "Facthory" and the Facthory logo are trademarks of their owner and are not covered by that licence. This includes the logo shown in the image under `docs/images/`.
 
 ## Jobs
 
