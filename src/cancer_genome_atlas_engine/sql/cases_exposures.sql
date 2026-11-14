@@ -1,4 +1,4 @@
--- Silver: patient exposures with a smoking status, one row per sample file.
+-- Joins the cases to their sample files: exposures with a smoking status, one row per sample file.
 SELECT c.case_id,
        f.file_id,
        c.alcohol_history,

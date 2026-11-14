@@ -1,4 +1,4 @@
--- Silver: expression file metadata, keeping the rows that carry both identifiers.
+-- Cleans the file metadata, keeping the rows that carry both identifiers.
 SELECT file_id,
        case_id,
        project_id,

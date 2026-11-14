@@ -1,4 +1,4 @@
-"""Silver: patient demographics per sample file."""
+"""Join the cases to their sample files: demographics per sample."""
 
 from __future__ import annotations
 

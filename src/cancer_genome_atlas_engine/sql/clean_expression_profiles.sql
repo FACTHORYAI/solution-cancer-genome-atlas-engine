@@ -1,4 +1,4 @@
--- Silver: gene expression profiles with validated FPKM values (negative FPKM becomes null).
+-- Cleans the expression profiles and validates the FPKM values (a negative value becomes null).
 SELECT file_id,
        gene_id,
        gene_name,

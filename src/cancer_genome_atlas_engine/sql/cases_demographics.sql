@@ -1,4 +1,4 @@
--- Silver: patient demographics with a vital-status flag, one row per sample file.
+-- Joins the cases to their sample files: demographics with a vital-status flag, one row per sample file.
 SELECT c.case_id,
        f.file_id,
        c.gender,

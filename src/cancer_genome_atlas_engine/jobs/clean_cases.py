@@ -1,4 +1,4 @@
-"""Silver: clinical cases with a case identifier."""
+"""Clean the clinical cases: keep the cases that carry a case identifier."""
 
 from __future__ import annotations
 

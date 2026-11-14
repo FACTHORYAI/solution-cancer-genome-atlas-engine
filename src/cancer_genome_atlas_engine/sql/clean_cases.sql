@@ -1,4 +1,4 @@
--- Silver: clinical cases, keeping the rows that carry a case identifier.
+-- Cleans the clinical cases, keeping the rows that carry a case identifier.
 SELECT case_id,
        gender,
        race,
