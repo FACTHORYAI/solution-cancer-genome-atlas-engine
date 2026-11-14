@@ -1,4 +1,4 @@
-"""Silver: expression file metadata with both identifiers present."""
+"""Clean the file metadata: keep the files that carry both a file and a case identifier."""
 
 from __future__ import annotations
 

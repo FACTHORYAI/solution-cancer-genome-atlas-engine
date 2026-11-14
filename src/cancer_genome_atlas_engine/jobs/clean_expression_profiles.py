@@ -1,4 +1,4 @@
-"""Silver: gene expression profiles with validated FPKM values."""
+"""Clean the expression profiles: validate the FPKM values."""
 
 from __future__ import annotations
 

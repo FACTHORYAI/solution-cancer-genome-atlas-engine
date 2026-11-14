@@ -41,7 +41,7 @@ REGISTRY: dict[str, JobSpec] = {
     for spec in (
         JobSpec(
             name="clean_expression_files",
-            description="Silver: expression file metadata with both identifiers present.",
+            description="Cleans the file metadata, keeping files with both identifiers.",
             run=clean_expression_files.run,
             params_cls=clean_expression_files.Params,
             inputs=clean_expression_files.INPUTS,
@@ -49,7 +49,7 @@ REGISTRY: dict[str, JobSpec] = {
         ),
         JobSpec(
             name="clean_cases",
-            description="Silver: clinical cases with a case identifier.",
+            description="Cleans the clinical cases, keeping cases with a case identifier.",
             run=clean_cases.run,
             params_cls=clean_cases.Params,
             inputs=clean_cases.INPUTS,
@@ -57,7 +57,7 @@ REGISTRY: dict[str, JobSpec] = {
         ),
         JobSpec(
             name="clean_expression_profiles",
-            description="Silver: expression profiles with validated FPKM values.",
+            description="Cleans the expression profiles and validates their FPKM values.",
             run=clean_expression_profiles.run,
             params_cls=clean_expression_profiles.Params,
             inputs=clean_expression_profiles.INPUTS,
@@ -65,7 +65,7 @@ REGISTRY: dict[str, JobSpec] = {
         ),
         JobSpec(
             name="cases_demographics",
-            description="Silver: patient demographics per sample file.",
+            description="Joins cases to sample files: demographics, with vital status.",
             run=cases_demographics.run,
             params_cls=cases_demographics.Params,
             inputs=cases_demographics.INPUTS,
@@ -73,7 +73,7 @@ REGISTRY: dict[str, JobSpec] = {
         ),
         JobSpec(
             name="cases_diagnoses",
-            description="Silver: patient diagnoses per sample file.",
+            description="Joins cases to sample files: diagnoses, with a treatment flag.",
             run=cases_diagnoses.run,
             params_cls=cases_diagnoses.Params,
             inputs=cases_diagnoses.INPUTS,
@@ -81,7 +81,7 @@ REGISTRY: dict[str, JobSpec] = {
         ),
         JobSpec(
             name="cases_exposures",
-            description="Silver: patient exposures per sample file.",
+            description="Joins cases to sample files: exposures, with smoking status.",
             run=cases_exposures.run,
             params_cls=cases_exposures.Params,
             inputs=cases_exposures.INPUTS,

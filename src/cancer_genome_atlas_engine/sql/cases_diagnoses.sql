@@ -1,4 +1,4 @@
--- Silver: patient diagnoses with a treatment flag, one row per sample file.
+-- Joins the cases to their sample files: diagnoses with a treatment flag, one row per sample file.
 SELECT c.case_id,
        f.file_id,
        c.classification_of_tumor,
